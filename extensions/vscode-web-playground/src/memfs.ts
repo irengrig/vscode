@@ -124,6 +124,65 @@ export class MemFS implements FileSystemProvider, FileSearchProvider, TextSearch
 		this.writeFile(Uri.parse(`memfs:/sample-folder/xyz/upper.txt`), textEncoder.encode('upper'), { create: true, overwrite: true });
 		this.writeFile(Uri.parse(`memfs:/sample-folder/xyz/def/foo.md`), textEncoder.encode('*MemFS*'), { create: true, overwrite: true });
 
+		let counter: number = 1;
+
+		// some more files & folders
+		this.createDirectory(Uri.parse(`memfs:/sample-folder/folder/`));
+		this.createDirectory(Uri.parse(`memfs:/sample-folder/large/`));
+		this.createDirectory(Uri.parse(`memfs:/sample-folder/xyz/`));
+		this.createDirectory(Uri.parse(`memfs:/sample-folder/xyz/abc`));
+		this.createDirectory(Uri.parse(`memfs:/sample-folder/xyz/def`));
+
+		//Add more files to the explorer
+		for (let level0 = 0; level0 < 7; level0++) {
+			this.createDirectory(Uri.parse(`memfs:/sample-folder/folder` + level0));
+
+			this.writeFile(Uri.parse(`memfs:/sample-folder/folder` + level0 + '/file.txt'), new Uint8Array(0), { create: true, overwrite: true });
+			this.writeFile(Uri.parse(`memfs:/sample-folder/folder` + level0 + '/file.java'), new Uint8Array(0), { create: true, overwrite: true });
+			this.writeFile(Uri.parse(`memfs:/sample-folder/folder` + level0 + '/file.cpp'), new Uint8Array(0), { create: true, overwrite: true });
+
+
+			for (let level1 = 0; level1 < 2 * counter; level1++) {
+				this.createDirectory(Uri.parse(`memfs:/sample-folder/folder` + level0 + '/subfolder' + level1));
+
+				this.writeFile(Uri.parse(`memfs:/sample-folder/folder` + level0 + '/subfolder' + level1 + '/file.txt'), new Uint8Array(0), { create: true, overwrite: true });
+				this.writeFile(Uri.parse(`memfs:/sample-folder/folder` + level0 + '/subfolder' + level1 + '/file.java'), new Uint8Array(0), { create: true, overwrite: true });
+				this.writeFile(Uri.parse(`memfs:/sample-folder/folder` + level0 + '/subfolder' + level1 + '/file.cpp'), new Uint8Array(0), { create: true, overwrite: true });
+
+				for (let level2 = 0; level2 < 2 * counter; level2++) {
+					this.createDirectory(Uri.parse(`memfs:/sample-folder/folder` + level0 + '/subfolder' + level1 + '/newsubfolder' + level2));
+
+					for (let file = 0; file < 2 * counter; file++) {
+						this.writeFile(Uri.parse(`memfs:/sample-folder/folder` + level0 + `/subfolder` + level1 + '/newsubfolder' + level2 + '/file' + file + '.txt'), new Uint8Array(0), { create: true, overwrite: true });
+						this.writeFile(Uri.parse(`memfs:/sample-folder/folder` + level0 + `/subfolder` + level1 + '/newsubfolder' + level2 + '/file' + file + '.java'), new Uint8Array(0), { create: true, overwrite: true });
+						this.writeFile(Uri.parse(`memfs:/sample-folder/folder` + level0 + `/subfolder` + level1 + '/newsubfolder' + level2 + '/file' + file + '.cpp'), new Uint8Array(0), { create: true, overwrite: true });
+						this.writeFile(Uri.parse(`memfs:/sample-folder/folder` + level0 + `/subfolder` + level1 + '/newsubfolder' + level2 + '/file' + file + '.c'), new Uint8Array(0), { create: true, overwrite: true });
+						this.writeFile(Uri.parse(`memfs:/sample-folder/folder` + level0 + `/subfolder` + level1 + '/newsubfolder' + level2 + '/file' + file + '.ts'), new Uint8Array(0), { create: true, overwrite: true });
+					}
+
+					for (let level3 = 0; level3 < counter; level3++) {
+						this.createDirectory(Uri.parse(`memfs:/sample-folder/folder` + level0 + '/subfolder' + level1 + '/newsubfolder' + level2 + '/newsubsubfolder' + level3));
+
+						this.writeFile(Uri.parse(`memfs:/sample-folder/folder` + level0 + '/subfolder' + level1 + '/newsubfolder' + level2 + '/newsubsubfolder' + level3 + '/file.java'), new Uint8Array(0), { create: true, overwrite: true });
+						this.writeFile(Uri.parse(`memfs:/sample-folder/folder` + level0 + '/subfolder' + level1 + '/newsubfolder' + level2 + '/newsubsubfolder' + level3 + '/file.cpp'), new Uint8Array(0), { create: true, overwrite: true });
+						this.writeFile(Uri.parse(`memfs:/sample-folder/folder` + level0 + '/subfolder' + level1 + '/newsubfolder' + level2 + '/newsubsubfolder' + level3 + '/file.ts'), new Uint8Array(0), { create: true, overwrite: true });
+
+						for (let level4 = 0; level4 < counter; level4++) {
+							this.createDirectory(Uri.parse(`memfs:/sample-folder/folder` + level0 + '/subfolder' + level1 + '/newsubfolder' + level2 + '/newsubsubfolder' + level3 + '/last' + level4));
+
+							this.writeFile(Uri.parse(`memfs:/sample-folder/folder` + level0 + '/subfolder' + level1 + '/newsubfolder' + level2 + '/newsubsubfolder' + level3 + '/last' + level4 + '/file.java'), new Uint8Array(0), { create: true, overwrite: true });
+							this.writeFile(Uri.parse(`memfs:/sample-folder/folder` + level0 + '/subfolder' + level1 + '/newsubfolder' + level2 + '/newsubsubfolder' + level3 + '/last' + level4 + '/file.cpp'), new Uint8Array(0), { create: true, overwrite: true });
+							this.writeFile(Uri.parse(`memfs:/sample-folder/folder` + level0 + '/subfolder' + level1 + '/newsubfolder' + level2 + '/newsubsubfolder' + level3 + '/last' + level4 + '/file.json'), new Uint8Array(0), { create: true, overwrite: true });
+							this.writeFile(Uri.parse(`memfs:/sample-folder/folder` + level0 + '/subfolder' + level1 + '/newsubfolder' + level2 + '/newsubsubfolder' + level3 + '/last' + level4 + '/file.ts'), new Uint8Array(0), { create: true, overwrite: true });
+
+						}
+					}
+				}
+			}
+
+			counter += 1;
+		}
+
 		// some files in different encodings
 		this.createDirectory(Uri.parse(`memfs:/sample-folder/encodings/`));
 		this.writeFile(
