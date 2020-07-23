@@ -157,9 +157,9 @@ import 'vs/workbench/contrib/logs/common/logs.contribution';
 import 'vs/workbench/contrib/quickaccess/browser/quickAccess.contribution';
 
 // Explorer
-import 'vs/workbench/contrib/files/browser/explorerViewlet';
+import 'vs/workbench/contrib/scopeTree/browser/explorerViewlet';
 import 'vs/workbench/contrib/files/browser/fileActions.contribution';
-import 'vs/workbench/contrib/files/browser/files.contribution';
+import 'vs/workbench/contrib/scopeTree/browser/files.contribution';
 
 // Backup
 import 'vs/workbench/contrib/backup/common/backup.contribution';
