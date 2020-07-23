@@ -1,0 +1,14 @@
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.scope-tree-focus-icon {
+	content: url('scope.svg');
+	float: left;
+	align-self: center;
+	visibility: hidden;
+	display: flex;
+	padding-left: 10px;
+}
+
