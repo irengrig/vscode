@@ -29,7 +29,7 @@ import { DelayedDragHandler } from 'vs/base/browser/dnd';
 import { IEditorService, SIDE_GROUP, ACTIVE_GROUP } from 'vs/workbench/services/editor/common/editorService';
 import { IViewPaneOptions, ViewPane } from 'vs/workbench/browser/parts/views/viewPaneContainer';
 import { ILabelService } from 'vs/platform/label/common/label';
-import { ExplorerDelegate, ExplorerDataSource, FilesRenderer, ICompressedNavigationController, FilesFilter, FileSorter, FileDragAndDrop, ExplorerCompressionDelegate, isCompressedFolderName } from 'vs/workbench/contrib/scopeTree/browser/explorerViewer';
+import { ExplorerDelegate, ExplorerDataSource, FilesRenderer, ICompressedNavigationController, FilesFilter, FileSorter, FileDragAndDrop, ExplorerCompressionDelegate, isCompressedFolderName, FocusIconRenderer } from 'vs/workbench/contrib/scopeTree/browser/explorerViewer';
 import { IThemeService, IFileIconTheme } from 'vs/platform/theme/common/themeService';
 import { IWorkbenchThemeService } from 'vs/workbench/services/themes/common/workbenchThemeService';
 import { ITreeContextMenuEvent } from 'vs/base/browser/ui/tree/tree';
@@ -57,6 +57,7 @@ import { dirname, basename } from 'vs/base/common/resources';
 import { Codicon } from 'vs/base/common/codicons';
 import 'vs/css!./media/treeNavigation';
 import { IBookmarksManager } from 'vs/workbench/contrib/scopeTree/common/bookmarks';
+import { IScopeTreeService } from 'vs/workbench/contrib/scopeTree/common/scopeTree';
 
 interface IExplorerViewColors extends IColorMapping {
 	listDropBackground?: ColorValue | undefined;
@@ -179,7 +180,8 @@ export class ExplorerView extends ViewPane {
 		@IFileService private readonly fileService: IFileService,
 		@IUriIdentityService private readonly uriIdentityService: IUriIdentityService,
 		@IOpenerService openerService: IOpenerService,
-		@IBookmarksManager private readonly bookmarksManager: IBookmarksManager
+		@IBookmarksManager private readonly bookmarksManager: IBookmarksManager,
+		@IScopeTreeService private readonly scopeTreeService: IScopeTreeService
 	) {
 		super(options, keybindingService, contextMenuService, configurationService, contextKeyService, viewDescriptorService, instantiationService, openerService, themeService, telemetryService);
 
@@ -349,18 +351,15 @@ export class ExplorerView extends ViewPane {
 		}));
 
 		this._register(this.tree.onMouseOver(e => {
-			const icon = document.getElementById('iconContainer_' + e.element?.resource.toString());
-
-			if (icon !== null) {
-				icon.style.visibility = 'visible';
+			if (e.element) {
+				this.scopeTreeService.showFocusIcon(e.element.resource, FocusIconRenderer.locationID);
+				console.log('bogdan');
 			}
 		}));
 
 		this._register(this.tree.onMouseOut(e => {
-			const icon = document.getElementById('iconContainer_' + e.element?.resource.toString());
-
-			if (icon !== null) {
-				icon.style.visibility = 'hidden';
+			if (e.element) {
+				this.scopeTreeService.hideFocusIcon(e.element.resource, FocusIconRenderer.locationID);
 			}
 		}));
 	}

@@ -60,6 +60,7 @@ import { IEditableData } from 'vs/workbench/common/views';
 import { IEditorInput } from 'vs/workbench/common/editor';
 import { CancellationTokenSource, CancellationToken } from 'vs/base/common/cancellation';
 import { IBookmarksManager, bookmarkClass } from 'vs/workbench/contrib/scopeTree/common/bookmarks';
+import { IScopeTreeService } from 'vs/workbench/contrib/scopeTree/common/scopeTree';
 
 export class ExplorerDelegate implements IListVirtualDelegate<ExplorerItem> {
 
@@ -241,13 +242,12 @@ export interface IFileTemplateData {
 	container: HTMLElement;
 }
 
-class FocusIconRenderer implements IDisposable {
+export class FocusIconRenderer implements IDisposable {
 	private _iconContainer: HTMLElement;
+	static readonly locationID = 'explorerViewerFocusIcon_';
 
-	constructor(private stat: ExplorerItem) {
-		this._iconContainer = document.createElement('img');
-		DOM.addClass(this._iconContainer, 'scope-tree-focus-icon');
-		this._iconContainer.id = 'iconContainer_' + this.stat.resource.toString();
+	constructor(private stat: ExplorerItem, private readonly scopeTreeService: IScopeTreeService) {
+		this._iconContainer = this.scopeTreeService.renderFocusIcon(this.stat.resource, FocusIconRenderer.locationID);
 	}
 
 	get iconContainer(): HTMLElement {
@@ -300,7 +300,8 @@ export class FilesRenderer implements ICompressibleTreeRenderer<ExplorerItem, Fu
 		@IThemeService private readonly themeService: IThemeService,
 		@IConfigurationService private readonly configurationService: IConfigurationService,
 		@IExplorerService private readonly explorerService: IExplorerService,
-		@ILabelService private readonly labelService: ILabelService
+		@ILabelService private readonly labelService: ILabelService,
+		@IScopeTreeService private readonly scopeTreeService: IScopeTreeService
 	) {
 		this.config = this.configurationService.getValue<IFilesConfiguration>();
 		this.configListener = this.configurationService.onDidChangeConfiguration(e => {
@@ -422,12 +423,9 @@ export class FilesRenderer implements ICompressibleTreeRenderer<ExplorerItem, Fu
 		});
 
 		if (stat.isDirectory) {
-			const focusIcon = new FocusIconRenderer(stat);
-			focusIcon.iconContainer.onclick = () => this.explorerService.setRoot(stat.resource);
-
+			const focusIcon = new FocusIconRenderer(stat, this.scopeTreeService);
 			templateData.label.element.style.float = 'left';
 			templateData.label.element.appendChild(focusIcon.iconContainer);
-
 			disposables.add(focusIcon);
 
 			if (this.bookmarksManager) {

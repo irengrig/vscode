@@ -6,40 +6,31 @@
 import 'vs/css!./media/scopeTreeFileIcon';
 import { IBreadcrumbObserver } from 'vs/workbench/browser/parts/editor/breadcrumbObserver';
 import { IFileStat, FileKind } from 'vs/platform/files/common/files';
-import { IExplorerService } from 'vs/workbench/contrib/files/common/files';
 import { IResourceLabel } from 'vs/workbench/browser/labels';
 import { URI } from 'vs/base/common/uri';
 import { Tree } from 'vs/workbench/browser/parts/editor/breadcrumbsPicker';
+import { IScopeTreeService } from 'vs/workbench/contrib/scopeTree/common/scopeTree';
 
 export class BreadcrumbObserver implements IBreadcrumbObserver {
 	declare readonly _serviceBrand: undefined;
+	private readonly locationID: string = 'breadcrumbFocusIconContainer';
 
 	constructor(
-		@IExplorerService private readonly explorerService: IExplorerService
+		@IScopeTreeService private readonly scopeTreeService: IScopeTreeService
 	) { }
 
 	registerTreeListeners(tree: Tree<any, any>): void {
 		tree.onMouseOver(e => {
 			const element = e.element as IFileStat;
 			if (element) {
-				const icon = document.getElementById('breadcrumbFocusIconContainer_' + element.resource.toString());
-				if (icon) {
-					icon.style.visibility = 'visible';
-					icon.onclick = () => {
-						const resource = element.resource;
-						this.explorerService.setRoot(resource);
-					};
-				}
+				this.scopeTreeService.showFocusIcon(element.resource, this.locationID);
 			}
 		});
 
 		tree.onMouseOut(e => {
 			const element = e.element as IFileStat;
 			if (element) {
-				const icon = document.getElementById('breadcrumbFocusIconContainer_' + element.resource.toString());
-				if (icon) {
-					icon.style.visibility = 'hidden';
-				}
+				this.scopeTreeService.hideFocusIcon(element.resource, this.locationID);
 			}
 		});
 	}
@@ -47,12 +38,9 @@ export class BreadcrumbObserver implements IBreadcrumbObserver {
 	renderFocusIcon(resource: URI, fileKind: FileKind, templateData: IResourceLabel): void {
 		templateData.element.style.float = '';
 
-		const iconContainer = document.createElement('img');
-		iconContainer.className = 'scope-tree-focus-icon';
-		iconContainer.id = 'breadcrumbFocusIconContainer_' + resource.toString();
-
-		const previousIcon = templateData.element.lastChild;
-		if (previousIcon && (<HTMLElement>previousIcon).className === 'scope-tree-focus-icon') {
+		const iconContainer = this.scopeTreeService.renderFocusIcon(resource, this.locationID);
+		const previousIcon = templateData.element.lastChild as HTMLElement;
+		if (previousIcon && previousIcon.className === 'scope-tree-focus-icon') {
 			templateData.element.removeChild(previousIcon);
 		}
 

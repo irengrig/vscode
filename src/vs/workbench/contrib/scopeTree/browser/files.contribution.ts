@@ -44,6 +44,8 @@ import { BookmarksManager } from 'vs/workbench/contrib/scopeTree/browser/bookmar
 import { IBookmarksManager } from 'vs/workbench/contrib/scopeTree/common/bookmarks';
 import { BreadcrumbObserver } from 'vs/workbench/contrib/scopeTree/browser/breadcrumbObserver';
 import { IBreadcrumbObserver } from 'vs/workbench/browser/parts/editor/breadcrumbObserver';
+import { ScopeTreeService } from 'vs/workbench/contrib/scopeTree/browser/scopeTree';
+import { IScopeTreeService } from 'vs/workbench/contrib/scopeTree/common/scopeTree';
 
 // Viewlet Action
 export class OpenExplorerViewletAction extends ShowViewletAction {
@@ -81,6 +83,7 @@ class FileUriLabelContribution implements IWorkbenchContribution {
 registerSingleton(IExplorerService, ExplorerService, true);
 registerSingleton(IBookmarksManager, BookmarksManager, true);
 registerSingleton(IBreadcrumbObserver, BreadcrumbObserver, true);
+registerSingleton(IScopeTreeService, ScopeTreeService, true);
 
 const openViewletKb: IKeybindings = {
 	primary: KeyMod.CtrlCmd | KeyMod.Shift | KeyCode.KEY_E
