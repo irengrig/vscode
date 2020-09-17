@@ -31,7 +31,7 @@ const addBookmark: ICommandHandler = (accessor: ServicesAccessor, scope: Bookmar
 	const stats = explorerService.getContext(/*respectMultiSelection = */ true);
 
 	for (let stat of stats) {
-		bookmarksManager.addBookmark(stat.resource, scope);
+		bookmarksManager.setBookmark(stat.resource, scope);
 	}
 };
 
@@ -92,7 +92,7 @@ const displayBookmarkInFileTree: ICommandHandler = (accessor: ServicesAccessor, 
 const handleBookmarksChange = (accessor: ServicesAccessor, element: Directory, newScope: BookmarkType) => {
 	const bookmarksManager = accessor.get(IBookmarksManager);
 	const resource = element.resource;
-	bookmarksManager.addBookmark(resource, newScope);
+	bookmarksManager.setBookmark(resource, newScope);
 };
 
 // Bookmarks panel context menu
@@ -387,7 +387,7 @@ KeybindingsRegistry.registerCommandAndKeybindingRule({
 					}
 
 					blueprints.forEach(res => {
-						bookmarksManager.addBookmark(URI.parse(res), BookmarkType.WORKSPACE);
+						bookmarksManager.setBookmark(URI.parse(res), BookmarkType.WORKSPACE);
 					});
 				});
 
@@ -411,7 +411,7 @@ KeybindingsRegistry.registerCommandAndKeybindingRule({
 					const resource = URI.parse(bookmark);
 					const exists = await fileService.exists(resource);
 					if (!exists) {
-						bookmarksManager.addBookmark(resource, BookmarkType.NONE);	// Remove bookmark
+						bookmarksManager.setBookmark(resource, BookmarkType.NONE);	// Remove bookmark
 					}
 				}
 			}

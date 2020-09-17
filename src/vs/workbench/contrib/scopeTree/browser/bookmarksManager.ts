@@ -32,7 +32,7 @@ export class BookmarksManager implements IBookmarksManager {
 	}
 
 	// Preserve sorting by date when bookmarks are added to the sets (most recent is the last inserted)
-	public addBookmark(resource: URI, scope: BookmarkType): void {
+	public setBookmark(resource: URI, scope: BookmarkType): void {
 		const resourceAsString = resource.toString();
 		let prevScope = BookmarkType.NONE;	// Undefined if bookmark already had the appropriate type
 
@@ -86,7 +86,7 @@ export class BookmarksManager implements IBookmarksManager {
 
 	public toggleBookmarkType(resource: URI): BookmarkType {
 		const newType = (this.getBookmarkType(resource) + 1) % 3;
-		this.addBookmark(resource, newType);
+		this.setBookmark(resource, newType);
 
 		return newType;
 	}

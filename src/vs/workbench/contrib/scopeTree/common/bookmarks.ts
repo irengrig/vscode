@@ -13,7 +13,7 @@ export interface IBookmarksManager {
 	readonly workspaceBookmarks: Set<string>;
 	sortType: SortType;
 
-	addBookmark(resource: URI, scope: BookmarkType): void;
+	setBookmark(resource: URI, scope: BookmarkType): void;
 	getBookmarkType(resource: URI): BookmarkType;
 	toggleBookmarkType(resource: URI): BookmarkType;
 	sortBookmarks(sortType: SortType): void;
