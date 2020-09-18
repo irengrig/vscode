@@ -30,7 +30,7 @@ import { ResourceLabels } from 'vs/workbench/browser/labels';
 import { IAction } from 'vs/base/common/actions';
 import { createAndFillInContextMenuActions } from 'vs/platform/actions/browser/menuEntryActionViewItem';
 import { IMenu, IMenuService, MenuId } from 'vs/platform/actions/common/actions';
-import { Directory, IDirectoryTemplateData, DirectoryElementIconRenderer, DirectoryRenderer } from 'vs/workbench/contrib/scopeTree/browser/directoryViewer';
+import { Directory, IDirectoryTemplateData, DirectoryElementIconRenderer, DirectoryRenderer, getDirectoriesAsSortedTreeElements, findIndexInSortedArray } from 'vs/workbench/contrib/scopeTree/browser/directoryViewer';
 import { IFileService } from 'vs/platform/files/common/files';
 
 export class BookmarkHeader {
@@ -259,8 +259,8 @@ export class BookmarksView extends ViewPane {
 		}
 		this.dirty = false;
 
-		this.globalBookmarks = Directory.getDirectoriesAsSortedTreeElements(this.bookmarksManager.globalBookmarks, sortType);
-		this.workspaceBookmarks = Directory.getDirectoriesAsSortedTreeElements(this.bookmarksManager.workspaceBookmarks, sortType);
+		this.globalBookmarks = getDirectoriesAsSortedTreeElements(this.bookmarksManager.globalBookmarks, sortType);
+		this.workspaceBookmarks = getDirectoriesAsSortedTreeElements(this.bookmarksManager.workspaceBookmarks, sortType);
 
 		for (let bookmark of this.workspaceBookmarks) {
 			bookmark.element.exists = await this.fileService.exists(bookmark.element.resource);
@@ -328,7 +328,7 @@ export class BookmarksView extends ViewPane {
 	private renderNewBookmark(resource: URI, scope: BookmarkType): void {
 		const resourceAsString = resource.toString();
 		const bookmarksArray = scope === BookmarkType.WORKSPACE ? this.workspaceBookmarks : this.globalBookmarks;
-		const resourceIndex = this.sortType === SortType.DATE ? 0 : Directory.findIndexInSortedArray(basename(resource), bookmarksArray);
+		const resourceIndex = this.sortType === SortType.DATE ? 0 : findIndexInSortedArray(basename(resource), bookmarksArray);
 		if (scope === BookmarkType.NONE) {
 			return;
 		}
