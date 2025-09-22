@@ -3,7 +3,7 @@
  *  Licensed under the MIT License. See License.txt in the project root for license information.
  *--------------------------------------------------------------------------------------------*/
 
-import { Disposable, DisposableStore, toDisposable } from '../../../../base/common/lifecycle.js';
+import { IDisposable, Disposable, DisposableStore, toDisposable } from '../../../../base/common/lifecycle.js';
 import { IActiveCodeEditor, ICodeEditor, MouseTargetType } from '../../../browser/editorBrowser.js';
 import { IEditorContribution, ScrollType } from '../../../common/editorCommon.js';
 import { ILanguageFeaturesService } from '../../../common/services/languageFeatures.js';
